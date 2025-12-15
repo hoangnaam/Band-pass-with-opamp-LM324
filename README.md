@@ -37,7 +37,7 @@ At this stage, the design was still based on **ideal assumptions**.
 The first verification step was simulation in **LTspice using an ideal op-amp**.
 
 Results:
-- AC analysis showed a gain **above 10 dB at ~156 Hz**
+- AC analysis showed a gain **15 dB at ~156 Hz** (little bit lower than 20dB somehow)
 - Clean sinusoidal behavior
 - No distortion or bandwidth limitations
 
@@ -60,7 +60,7 @@ To ensure correct operation, the **non-inverting (+) input** was biased at mid-s
 V_{\text{bias}} = \frac{3.3\ \text{V}}{2}
 \]
 
-This biasing allowed the AC signal to swing symmetrically around a valid operating point.
+This biasing allowed the AC signal to swing symmetrically around a valid operating point. (here we need to worry about the max amplitude for input signal)
 
 ---
 
@@ -68,7 +68,7 @@ This biasing allowed the AC signal to swing symmetrically around a valid operati
 
 With the real op-amp model, another practical limitation became evident:
 
-- The input sinusoidal signal had to be limited to **~200 mV (peak)**  
+- The input sinusoidal signal had to be limited to **~200 mV (peak)** (as said above)
 - Larger amplitudes resulted in **output clipping and distortion**
 
 This behavior is due to the **finite output swing and headroom** of the LM324 and is not visible when using ideal op-amp models.
@@ -81,7 +81,7 @@ The circuit was then implemented on a **breadboard** and tested using laboratory
 
 Test conditions:
 - Function generator amplitude: ≈ 200 mV
-- Input frequency: **156 Hz** (chosen from AC analysis where gain > 10 dB)
+- Input frequency: **156 Hz** (chosen from AC analysis where gain gets highest)
 
 Oscilloscope measurements:
 - Input signal ≈ 200 mV
@@ -92,7 +92,7 @@ Measured gain:
 20 \log_{10}\left(\frac{600\ \text{mV}}{200\ \text{mV}}\right) \approx 10\ \text{dB}
 \]
 
-This matched the theoretical and simulated results.
+This is lower than expected. However, the reason came below.
 
 ---
 
@@ -105,7 +105,7 @@ The discrepancy was explained by an often-overlooked detail:
 > **Most function generators have an internal 50 Ω output impedance.**
 
 In the original simulation, this resistance was not included.  
-After adding a **50 Ω series resistor** before the input resistor in LTspice, the simulation results aligned closely with the experimental measurements.
+After adding a **50 Ω series resistor** before the input resistor in LTspice, the simulation results aligned closely with the experimental measurements. (check the schematics in LTSpice)
 
 This confirmed that **test equipment is part of the circuit** and must be modeled accordingly.
 
